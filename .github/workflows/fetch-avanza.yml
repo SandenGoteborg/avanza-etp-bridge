@@ -3,6 +3,7 @@ name: Fetch Avanza ETP snapshot
 on:
   workflow_dispatch:
   schedule:
+    # GitHub cron uses UTC. 03:30 UTC leaves a buffer before the 07:00 brief.
     - cron: "30 3 * * 1-5"
 
 permissions:
@@ -30,19 +31,21 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Fetch Avanza snapshot
+      - name: Fetch and analyse Avanza snapshot
         env:
-          TOP_N: "200"
+          TOP_N: "500"
+          AGENT_TOP_PRODUCTS_PER_FAMILY: "100"
+          MAX_CHANGE_ROWS: "100"
         run: python src/fetch_avanza.py
 
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest.json data/snapshots/
+          git add data/latest.json data/latest_full.json data/history/
           if git diff --cached --quiet; then
             echo "No data changes to commit."
           else
-            git commit -m "Update Avanza ETP snapshot"
+            git commit -m "Update Avanza ETP analytics"
             git push
           fi
