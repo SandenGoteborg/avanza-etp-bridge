@@ -34,6 +34,7 @@ CERTIFICATE_ENDPOINT = "/_api/market-certificate-filter/"
 TOP_N = int(os.getenv("TOP_N", "500"))
 PAGE_SIZE = min(int(os.getenv("PAGE_SIZE", "100")), 100)
 TIMEOUT_SECONDS = int(os.getenv("HTTP_TIMEOUT_SECONDS", "30"))
+REQUEST_DELAY_SECONDS = float(os.getenv("REQUEST_DELAY_SECONDS", "1.0"))
 AGENT_TOP_PRODUCTS_PER_FAMILY = int(os.getenv("AGENT_TOP_PRODUCTS_PER_FAMILY", "100"))
 MAX_CHANGE_ROWS = int(os.getenv("MAX_CHANGE_ROWS", "100"))
 MIN_PRODUCT_CHANGE_TURNOVER_SEK = float(os.getenv("MIN_PRODUCT_CHANGE_TURNOVER_SEK", "100000"))
@@ -163,6 +164,9 @@ def fetch_top(
         response = _post_json(session, endpoint, payload_factory(offset, limit))
         page = _extract_items(response, expected_key)
         rows.extend(page)
+        
+        time.sleep(REQUEST_DELAY_SECONDS)
+        
         if len(page) < limit:
             break
     return rows[:top_n]
