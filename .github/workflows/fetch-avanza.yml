@@ -3,8 +3,8 @@ name: Fetch Avanza ETP snapshot
 on:
   workflow_dispatch:
   schedule:
-    # GitHub cron uses UTC. 03:30 UTC leaves a buffer before the 07:00 brief.
-    - cron: "30 3 * * 1-5"
+    - cron: "17 1 * * 1-5"
+      timezone: "Europe/Stockholm"
 
 permissions:
   contents: write
