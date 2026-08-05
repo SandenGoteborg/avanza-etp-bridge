@@ -26,8 +26,6 @@
     "A product appearing in a top list is not proof that it was newly issued.",
     "The endpoints are undocumented and may change without notice."
   ],
-  "purpose": "Agent-optimised deterministic analysis; use latest_full.json only for deeper product-level drill-down.",
-  "full_raw_file": "data/latest_full.json",
   "analytics": {
     "overall": {
       "number_of_products": 1000,
